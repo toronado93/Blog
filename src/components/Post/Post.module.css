@@ -1,0 +1,16 @@
+.postdiv {
+  text-align: left;
+  max-width: 36ch;
+  border: 1px solid white;
+  padding: 1rem;
+  border-radius: 1.5rem;
+  margin-block-end: 1em;
+}
+
+.form {
+  display: flex;
+  gap: 1em;
+}
+.form > label {
+  align-self: flex-end;
+}
