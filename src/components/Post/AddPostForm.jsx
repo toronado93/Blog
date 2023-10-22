@@ -1,7 +1,7 @@
 import styles from "../Post/Post.module.css";
 import { useState } from "react";
 
-import { postAdded } from "../../slices/postsSlice";
+import { addNewPost } from "../../slices/postsSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 import { selectAllUsers } from "../../slices/usersSlice";
@@ -12,6 +12,7 @@ function AddPostForm() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [userId, setUserId] = useState("");
+  const [addRequestStatus, setAddRequestStatus] = useState("idle");
 
   const users = useSelector(selectAllUsers);
 
@@ -19,18 +20,30 @@ function AddPostForm() {
   const onContentChanged = (e) => setContent(e.target.value);
   const onAuthorChanged = (e) => setUserId(e.target.value);
 
+  // Esy way to ENABLE AND DISABLE A BUTTON , embeded it with the button itself
+  const canSave =
+    [title, content, userId].every(Boolean) && addRequestStatus === "idle";
+
   //  On Save Logic
+  // redux toolkit has unwrap method , this method return us a promises
+  // either action.payload or error , this gives us a change to use try and catch blog here.
 
   const onSavePostClicked = () => {
-    if (title && content) {
-      dispatch(postAdded(title, content, userId));
-    }
-    setTitle("");
-    setContent("");
-  };
+    if (canSave) {
+      try {
+        setAddRequestStatus("pending");
+        dispatch(addNewPost({ title, body: content, userId })).unwrap();
 
-  // Esy way to ENABLE AND DISABLE A BUTTON , embeded it with the button itself
-  const canSave = Boolean(title) && Boolean(content) && Boolean(userId);
+        setTitle("");
+        setContent("");
+        setUserId("");
+      } catch (err) {
+        console.error("Failed to save the post", err);
+      } finally {
+        setAddRequestStatus("idle");
+      }
+    }
+  };
 
   const usersOption = users.map((user) => {
     return (
