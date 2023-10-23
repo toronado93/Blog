@@ -1,28 +1,28 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
-import { useEffect } from "react";
 import {
   selectAllPosts,
   getPostStatus,
   getPostsError,
-  fetchPosts,
 } from "../../slices/postsSlice";
 import PostsExcerpt from "./PostsExcerpt";
 
+import styles from "../Post/Post.module.css";
+
 function PostsList() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const posts = useSelector(selectAllPosts);
   const postStatus = useSelector(getPostStatus);
   const error = useSelector(getPostsError);
 
   // Trigger Async function
 
-  useEffect(() => {
-    if (postStatus === "idle") {
-      dispatch(fetchPosts());
-    }
-  }, [postStatus, dispatch]);
+  // useEffect(() => {
+  //   if (postStatus === "idle") {
+  //     dispatch(fetchPosts());
+  //   }
+  // }, [postStatus, dispatch]);
 
   let content;
   if (postStatus === "loading") {
@@ -40,7 +40,7 @@ function PostsList() {
   }
 
   return (
-    <section>
+    <section className={styles.container}>
       <h2>Posts</h2>
       {content}
     </section>

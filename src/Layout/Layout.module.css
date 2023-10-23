@@ -1,0 +1,23 @@
+.header {
+  display: flex;
+  gap: 5rem;
+  justify-content: center;
+
+  padding: 2rem;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+
+  background-color: #585f38;
+}
+
+nav > ul > li {
+  list-style: none;
+}
+
+.link {
+  color: #e4e3dd;
+}
+
+nav {
+  align-self: center;
+}
