@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectPostById,
@@ -23,6 +23,40 @@ function EditPostForm() {
   const [userId, setUserId] = useState(post?.userId);
   const [requestStatus, setRequestStatus] = useState("idle");
 
+  //   During edit , if page is reload , use localstorage and bring information back , set all the logic
+  // UseEffect for LocalStorage
+
+  // LocalStorage
+
+  const localSaveData = () => {
+    if (canSave) {
+      try {
+        localStorage.setItem(
+          "editedPost",
+          JSON.stringify({ title, content, userId, requestStatus })
+        );
+      } catch (error) {
+        console.log("Something happened");
+      }
+    }
+  };
+
+  useEffect(() => {
+    localSaveData();
+  }, [title, content]);
+
+  // Mountant When Page Refresh
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("editedPost");
+    if (savedData) {
+      const { title, content, userId } = JSON.parse(savedData);
+      setTitle(title);
+      setContent(content);
+      setUserId(userId);
+    }
+  }, [postId]);
+
   const canSave =
     [title, content, userId].every(Boolean) && requestStatus === "idle";
 
@@ -34,10 +68,12 @@ function EditPostForm() {
     );
   }
 
-  //   During edit , if page is reload , use localstorage and bring information back , set all the logic
-
   const onTitleChanged = (e) => setTitle(e.target.value);
-  const onContentChanged = (e) => setContent(e.target.value);
+  // Oncontentchange with LocalStorage
+  const onContentChanged = (e) => {
+    setContent(e.target.value);
+    // localSaveData();
+  };
   const onAuthorChanged = (e) => setUserId(e.target.value);
   const onSavePostClicked = () => {
     if (canSave) {
