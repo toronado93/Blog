@@ -74,7 +74,7 @@ function EditPostForm() {
     setContent(e.target.value);
     // localSaveData();
   };
-  const onAuthorChanged = (e) => setUserId(e.target.value);
+  const onAuthorChanged = (e) => setUserId(Number(e.target.value));
   const onSavePostClicked = () => {
     if (canSave) {
       try {
